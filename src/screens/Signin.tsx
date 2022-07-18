@@ -1,10 +1,13 @@
 // Aqui você importa alguns componentes
 
-import { VStack, Heading } from 'native-base';
+import { VStack, Heading, Icon } from 'native-base';
+
 
 // Assets
+
 import Logo from '../assets/logo_primary.svg';
 import { Input } from '../components/input';
+import { Envelope, Key} from 'phosphor-react-native';
 
 // Funções ou componentes (Usar camelCase)
 
@@ -18,7 +21,12 @@ export function SignIn() {
                 Acesse sua conta
             </Heading>
 
-            <Input />
+            <Input 
+                placeholder="E-mail" 
+                mb={4}
+                InputLeftElement={ <Icon as={<Envelope />} /> }
+            />
+            <Input placeholder="Senha" />
 
         </VStack>
     )
