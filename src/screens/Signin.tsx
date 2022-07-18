@@ -4,6 +4,7 @@ import { VStack, Heading } from 'native-base';
 
 // Assets
 import Logo from '../assets/logo_primary.svg';
+import { Input } from '../components/input';
 
 // Funções ou componentes (Usar camelCase)
 
@@ -16,6 +17,8 @@ export function SignIn() {
             <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>
                 Acesse sua conta
             </Heading>
+
+            <Input />
 
         </VStack>
     )
