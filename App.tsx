@@ -1,16 +1,33 @@
 // native base
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, StatusBar } from 'native-base';
+import { useFonts, Roboto_400Regular, Roboto_700Bold} from '@expo-google-fonts/roboto';
 
 // tema
 import { THEME } from './src/styles/theme'
 
 // imports das telas
 import { SignIn } from './src/screens/SignIn';
+import { Loading } from './src/components/loading';
+
 
 export default function App() {
-  return (
+
+  // Configuração da fonte
+  const [fontsLoaded] = useFonts({Roboto_400Regular, Roboto_700Bold});  // armazena um booleano dizendo se carregou ou não
+
+
+  // Retorna as telas
+  return ( 
     <NativeBaseProvider theme={THEME}>
-      <SignIn />
+
+      <StatusBar 
+        barStyle='light-content'
+        backgroundColor="transparent"
+        translucent
+      />
+
+      { fontsLoaded ? <SignIn /> : <Loading /> }
+    
     </NativeBaseProvider>
   );
 }
