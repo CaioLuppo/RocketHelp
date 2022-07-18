@@ -1,21 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// native base
+import { NativeBaseProvider } from 'native-base';
+
+// tema
+import { THEME } from './src/styles/theme'
+
+// imports das telas
+import { SignIn } from './src/screens/SignIn';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello React Native!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider theme={THEME}>
+      <SignIn />
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
