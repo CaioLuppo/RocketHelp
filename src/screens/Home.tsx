@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Heading, HStack, IconButton, Text, useTheme, VStack } from 'native-base';
 
 import { SignOut } from 'phosphor-react-native';
@@ -8,6 +10,8 @@ import { Filter } from '../components/filter';
 
 
 export function Home() {
+
+const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
 
 const { colors } = useTheme();
 
@@ -45,16 +49,22 @@ return (
             </HStack>
 
             {/* Filtros */}
-            <HStack>
+            <HStack space={3} mb={8}>
                 <Filter 
                     type='open'
                     title='Em andamento'
+                    onPress={() => setStatusSelected('open')} // quando recebe parâmetro, tem que ser nesse formato
+                    isActive={statusSelected === 'open'}
                 />
                 <Filter 
                     type='closed'
                     title='Encerrados'
+                    onPress={() => setStatusSelected('closed')}
+                    isActive={statusSelected === 'closed'}
                 />
             </HStack>
+
+            
 
         </VStack>
 
