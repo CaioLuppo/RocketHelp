@@ -6,7 +6,7 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold} from '@expo-google-fonts/r
 import { THEME } from './src/styles/theme'
 
 // imports das telas
-import { SignIn } from './src/screens/SignIn';
+import { Home } from './src/screens/Home';
 import { Loading } from './src/components/loading';
 
 
@@ -26,7 +26,7 @@ export default function App() {
         translucent
       />
 
-      { fontsLoaded ? <SignIn /> : <Loading /> }
+      { fontsLoaded ? <Home /> : <Loading /> }
     
     </NativeBaseProvider>
   );
