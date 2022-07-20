@@ -4,7 +4,7 @@ import { Header } from '../components/header';
 import { Input } from '../components/input';
 import { Button } from '../components/button';
 
-export function Register({title, ...rest}) {
+export function Register() {
 
   return (
     <VStack flex={1} bg="gray.600" p={6}>

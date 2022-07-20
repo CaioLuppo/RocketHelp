@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { useNavigation } from '@react-navigation/native';
 import { Heading, HStack, IconButton, Text, useTheme, VStack, FlatList, Center } from 'native-base';
 
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
@@ -12,83 +12,92 @@ import { Button } from '../components/button';
 
 export function Home() {
 
-const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
-const [orders, setOrders] = useState<OrderProps[]>([]);
+    const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
+    const [orders, setOrders] = useState<OrderProps[]>([]);
 
-const { colors } = useTheme();
+    const navigation = useNavigation();
+    const { colors } = useTheme();
 
-return (
-    <VStack flex={1} pb={6} bg="gray.700">
+    function handleNewOrder(){
+        navigation.navigate('new')
+    }
 
-        {/* Cabeçalho */}
-        <HStack
-            w="full"
-            justifyContent="space-between"
-            alignItems="center"
-            bg="gray.600"
-            pt={12}
-            pb={5}
-            px={6}
-        >
-            
-            <Logo />
+    function handleOpenDetails(orderId: string){
+        navigation.navigate("details", {orderId})
+    }
 
-            <IconButton 
-                icon = {<SignOut size={26} color={colors.gray[300]} />}
-            />
+    return (
+        <VStack flex={1} pb={6} bg="gray.700">
 
-        </HStack>
+            {/* Cabeçalho */}
+            <HStack
+                w="full"
+                justifyContent="space-between"
+                alignItems="center"
+                bg="gray.600"
+                pt={12}
+                pb={5}
+                px={6}
+            >
+                
+                <Logo />
 
-        {/* Meus chamados */}
-        <VStack flex={1} px={6}>
+                <IconButton 
+                    icon = {<SignOut size={26} color={colors.gray[300]} />}
+                />
 
-            {/* Texto do heading */}
-            <HStack w="full" mt={8} mb={4} justifyContent="space-between" alignItems="center">
-
-                <Heading color="gray.100" >Meus chamados</Heading>
-
-                <Text color="gray.200"> 3 </Text>
             </HStack>
 
-            {/* Filtros */}
-            <HStack space={3} mb={8}>
-                <Filter 
-                    type='open'
-                    title='Em andamento'
-                    onPress={() => setStatusSelected('open')} // quando recebe parâmetro, tem que ser nesse formato
-                    isActive={statusSelected === 'open'}
-                />
-                <Filter 
-                    type='closed'
-                    title='Encerrados'
-                    onPress={() => setStatusSelected('closed')}
-                    isActive={statusSelected === 'closed'}
-                />
-            </HStack>
+            {/* Meus chamados */}
+            <VStack flex={1} px={6}>
 
-            {/* Lista de Chamados */}
-            <FlatList 
-                data={orders}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => <Order data={item} />}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 100 }}
-                ListEmptyComponent={() => (
-                    <Center>
-                        <ChatTeardropText color={colors.gray[300]} size={40} />
-                        <Text color="gray.300" fontSize="xl" mt={6} textAlign="Center" >
-                            Você ainda não possui {"\n"}
-                            solicitações {statusSelected === 'open' ? 'em andamento.' : 'finalizadas.'}
-                        </Text>
-                    </Center>
-                )}
-            />
+                {/* Texto do heading */}
+                <HStack w="full" mt={8} mb={4} justifyContent="space-between" alignItems="center">
 
-            {/* Botão de Nova Solicitação */}
-            <Button title='Nova Solicitação' />
+                    <Heading color="gray.100" >Meus chamados</Heading>
+
+                    <Text color="gray.200"> 3 </Text>
+                </HStack>
+
+                {/* Filtros */}
+                <HStack space={3} mb={8}>
+                    <Filter 
+                        type='open'
+                        title='Em andamento'
+                        onPress={() => setStatusSelected('open')} // quando recebe parâmetro, tem que ser nesse formato
+                        isActive={statusSelected === 'open'}
+                    />
+                    <Filter 
+                        type='closed'
+                        title='Encerrados'
+                        onPress={() => setStatusSelected('closed')}
+                        isActive={statusSelected === 'closed'}
+                    />
+                </HStack>
+
+                {/* Lista de Chamados */}
+                <FlatList 
+                    data={orders}
+                    keyExtractor={item => item.id}
+                    renderItem={({item}) => <Order data={item} onPress={() => handleOpenDetails(item.id)}/>}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 100 }}
+                    ListEmptyComponent={() => (
+                        <Center>
+                            <ChatTeardropText color={colors.gray[300]} size={40} />
+                            <Text color="gray.300" fontSize="xl" mt={6} textAlign="Center" >
+                                Você ainda não possui {"\n"}
+                                solicitações {statusSelected === 'open' ? 'em andamento.' : 'finalizadas.'}
+                            </Text>
+                        </Center>
+                    )}
+                />
+
+                {/* Botão de Nova Solicitação */}
+                <Button title='Nova Solicitação' onPress={handleNewOrder}/>
+
+            </VStack>
 
         </VStack>
-
-    </VStack>
-  );
+    );
 }
