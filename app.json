@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rockethelp",
-    "slug": "rockethelp",
+    "name": "rocket",
+    "slug": "rocket",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
