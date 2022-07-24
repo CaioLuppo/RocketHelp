@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
+// firebase
+import auth from "@react-native-firebase/auth";
+
 // Aqui você importa alguns componentes
 
-import { VStack, Heading, Icon, useTheme } from 'native-base';
+import { VStack, Heading, Icon, useTheme, Alert } from 'native-base';
 import { Input } from '../components/input';
 import { Button } from '../components/button';
 
@@ -16,10 +19,16 @@ import { Envelope, Key} from 'phosphor-react-native';
 export function SignIn() {
 
     // estados
-    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const { colors } = useTheme();
+
+    function HandleSignIn() {
+        if(!email || !password){
+            return <Alert>Insira e-mail e senha!</Alert>;
+        }
+    }
 
     return (
         <VStack flex={1} alignItems="center" bg="gray.600" px={8} pt={24}>
@@ -35,7 +44,7 @@ export function SignIn() {
                 placeholder="E-mail" 
                 InputLeftElement={ <Icon as={<Envelope color={colors.gray[300]} />} ml={4} /> }
 
-                onChangeText={setName}
+                onChangeText={setEmail}
 
             />
 

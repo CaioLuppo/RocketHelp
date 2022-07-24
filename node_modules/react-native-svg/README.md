@@ -3,13 +3,11 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS and Android, and a compatibility layer for the web.
+`react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
-## Looking for maintainers
-
-https://github.com/react-native-svg/react-native-svg/issues/1554
+[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
 
 ## Features
 
@@ -347,6 +345,29 @@ export default () => (
     uri="http://thenewcode.com/assets/svg/accessibility.svg"
   />
 );
+```
+
+#### Error handling
+
+Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
+You can set property `onError` if you want to handle errors such as resource not
+existing in a different way.
+
+```jsx
+import * as React from 'react';
+import { SvgUri } from 'react-native-svg';
+
+export default () => {
+  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
+  return (
+    <SvgUri
+      onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
+      width="100%"
+      height="100%"
+      uri={uri}
+    />
+  );
+}
 ```
 
 ### Use with svg files
@@ -1082,7 +1103,7 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 
 v10 adds experimental support for using masks together with native elements.
 If you had native elements inside any Svg root before (which was unsupported),
-Then your content might change appearance when upgrading,
+then your content might change appearance when upgrading,
 as e.g. transforms and masks now take effect.
 
 #### Pattern
