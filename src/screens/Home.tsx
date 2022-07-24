@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Heading, HStack, IconButton, Text, useTheme, VStack, FlatList, Center } from 'native-base';
 
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 import Logo from '../assets/logo_secondary.svg';
@@ -11,10 +12,14 @@ import { Filter } from '../components/filter';
 import { Order, OrderProps } from '../components/order';
 import { Button } from '../components/button';
 import { Alert } from 'react-native';
+import { Loading } from '../components/loading';
 
+import { dateFormat } from '../utils/firestoreDateFormat';
+import { isLoading } from 'expo-font';
 
 export function Home() {
 
+    const [isLoading, setIsLoading] = useState(true);
     const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
     const [orders, setOrders] = useState<OrderProps[]>([]);
 
@@ -37,6 +42,35 @@ export function Home() {
             Alert.alert("Oops!", "Não foi possível sair.");
         });
     }
+
+    useEffect(() => {
+
+        setIsLoading(true); // quando troca o filtro também carrega
+
+        const subscriber = firestore()
+        .collection('orders')
+        .where('status', '==', statusSelected)
+        .onSnapshot(snapshot => {
+            const data = snapshot.docs.map(doc => {
+                const { patrimony, description, status, created_at } = doc.data();
+
+                return {
+                    id: doc.id,
+                    patrimony,
+                    description,
+                    status,
+                    when: dateFormat(created_at)
+                }
+            });
+
+            setOrders(data);
+            setIsLoading(false);
+
+        }); // tempo real
+
+        return subscriber;
+
+    }, [statusSelected]);
 
     return (
         <VStack flex={1} pb={6} bg="gray.700">
@@ -69,7 +103,7 @@ export function Home() {
 
                     <Heading color="gray.100" >Meus chamados</Heading>
 
-                    <Text color="gray.200"> 3 </Text>
+                    <Text color="gray.200"> {orders.length} </Text>
                 </HStack>
 
                 {/* Filtros */}
@@ -89,7 +123,7 @@ export function Home() {
                 </HStack>
 
                 {/* Lista de Chamados */}
-                <FlatList 
+                { isLoading ? <Loading /> : <FlatList 
                     data={orders}
                     keyExtractor={item => item.id}
                     renderItem={({item}) => <Order data={item} onPress={() => handleOpenDetails(item.id)}/>}
@@ -104,7 +138,7 @@ export function Home() {
                             </Text>
                         </Center>
                     )}
-                />
+                /> }
 
                 {/* Botão de Nova Solicitação */}
                 <Button title='Nova Solicitação' onPress={handleNewOrder}/>
