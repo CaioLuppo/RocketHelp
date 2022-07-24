@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { OrderFirestoreDTO } from '../DTOs/OrdersDTO';
 import { dateFormat } from '../utils/firestoreDateFormat';
 import { Loading } from '../components/loading';
-import { CircleWavyCheck, DesktopTower, Hourglass, Clipboard } from 'phosphor-react-native';
+import { CircleWavyCheck, DesktopTower, Hourglass, ClipboardText } from 'phosphor-react-native';
 import { CardDetails } from '../components/cardDetails';
 import { Input } from '../components/input';
 import { Button } from '../components/button';
@@ -121,8 +121,8 @@ export function Details() {
             <CardDetails 
               title='Descrição do Problema'
               description={`${order.description}`}
-              icon={Clipboard}
-              footer={order.when}
+              icon={ClipboardText}
+              footer={`Registrado em ${order.when}`}
             />
             <CardDetails 
               title='solução'
