@@ -5,7 +5,7 @@ import auth from "@react-native-firebase/auth";
 
 // Aqui você importa alguns componentes
 
-import { VStack, Heading, Icon, useTheme, Alert } from 'native-base';
+import { VStack, Heading, Icon, useTheme } from 'native-base';
 import { Input } from '../components/input';
 import { Button } from '../components/button';
 
@@ -13,12 +13,14 @@ import { Button } from '../components/button';
 
 import Logo from '../assets/logo_primary.svg';
 import { Envelope, Key} from 'phosphor-react-native';
+import { Alert } from 'react-native';
 
 // Funções ou componentes (Usar camelCase)
 
 export function SignIn() {
 
     // estados
+    const [isLoanding, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -26,8 +28,32 @@ export function SignIn() {
 
     function HandleSignIn() {
         if(!email || !password){
-            return <Alert>Insira e-mail e senha!</Alert>;
+            return Alert.alert("Erro!", "Informe e-mail e senha para entrar.");
         }
+
+        setIsLoading(true);
+
+        auth() //firebase
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) => {
+
+            console.log(error.code);
+            setIsLoading(false);
+
+            switch (error.code) {
+                case "auth/invalid-email":
+                    return Alert.alert("Erro!", "Formato de e-mail inválido.");
+                case "auth/user-not-found":
+                    return Alert.alert("Erro!", "E-mail ou senha inválidos.");
+                case "auth/wrong-password":
+                    return Alert.alert("Erro!", "E-mail ou senha inválidos.");
+
+            }
+
+            return Alert.alert("Erro!", "Não foi possível acessar.")
+
+        })
+
     }
 
     return (
@@ -58,7 +84,12 @@ export function SignIn() {
 
             />
 
-            <Button title='Entrar' w='full' />
+            <Button 
+                title='Entrar' 
+                w='full' 
+                onPress={HandleSignIn}
+                isLoading={isLoanding}
+            />
 
         </VStack>
     )
